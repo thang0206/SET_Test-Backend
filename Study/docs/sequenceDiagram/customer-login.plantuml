@@ -1,0 +1,35 @@
+@startuml customer
+    actor Customer
+    participant Server
+    database customer
+
+    opt customer login
+        Customer -> Server: POST /login
+        activate Server
+        Server -> customer: Find Customer(email, password)
+        activate customer
+
+        alt <font color=Red> error
+            Server <-- customer: Server error 
+            Customer <-- Server: 500
+
+        else <font color=Red> Not found Customer
+            Server <-- customer: Can not found customer
+            Customer <-- Server: 404
+
+        else <font color=Green> success 
+            Server <- customer: Success 
+            alt <font color=Red> error
+                Server <-- customer: Server error
+                Customer <-- Server: 500
+
+            else <font color=Green> success
+                Server <-- customer: Success, send JWT
+                deactivate customer
+                Customer <-- Server: 200
+                deactivate Server
+            end
+        end 
+    end
+
+@enduml

@@ -1,0 +1,95 @@
+@startuml an e-commercial platform
+
+skinparam linetype ortho
+
+entity User {
+    *user_ID: String <<generated>>
+    --
+    *email: String
+    *password: String
+    *name: String
+    *address: String
+    *phoneNumber: String
+    gender: Gender <<enum>>
+    role: Role <<enum>>
+    createAt: Date
+    updatedAt: Date
+}
+
+entity Cart {
+    *cart_ID: String <<generated>>
+    --
+    user_ID: String <<FK>>
+    --
+    totalProduct: Number
+    createAt: Date
+    updatedAt: Date
+}
+
+entity Product {
+    *product_ID: String <<generated>>
+    --
+    cart_ID: String <<FK>>
+    user_ID: String <<FK>>
+    billing_ID: String <<FK>>
+    --
+    *name: String
+    *price: Number
+    createAt: Date
+    updatedAt: Date
+}
+
+entity Transaction {
+    *transaction_ID: String <<generated>>
+    --
+    user_ID: String <<FK>>
+    --
+    *status: DeliveryStatus <<enum>>
+    createAt: Date
+    updatedAt: Date
+}
+
+entity Billing {
+    *billing_ID: String <<generated>>
+    --
+    transaction_ID: String <<FK>>
+    --
+    *totalPrice: Number <<FK>>
+    *payment: Payment <<enum>>
+    createAt: Date
+    updatedAt: Date
+}
+
+enum Role {
+    User
+    Admin
+    Agency
+}
+
+enum Gender {
+    Male
+    Female
+    Other
+}
+
+enum Payment {
+    Cash
+    CreditCard
+    Banking
+}
+
+enum DeliveryStatus {
+    Completed
+    Pending
+    Uncompleted
+}
+
+
+User ||--|| Cart
+User ||--|| Transaction
+User ||--|{ Product
+Cart ||--|{ Product
+Billing ||--|{ Product
+Transaction ||--|| Billing
+
+@enduml

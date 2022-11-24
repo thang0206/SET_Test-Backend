@@ -1,0 +1,51 @@
+@startuml read agency owner invoice
+
+actor Agency
+control server
+database agency
+database transaction
+database invoice
+
+opt Read agency transaction
+    Agency -> server: Get /transactions/:transactionId/invoices/:invoiceId, token
+    activate server
+    server -> server: verifyToken
+    alt Invalid token
+        Agency <-- server: 401, Invalid token
+    else Valid token
+        server -> server: isAgency
+        alt Is not agency
+            Agency <-- server: Is not agency
+        else Is agency
+            server -> agency: findAgency
+            activate agency
+            agency -> transaction: findTransactionById(transactionId)
+            activate transaction
+            alt Not found transaction
+                agency <-- transaction: notFoundTransaction
+                server <-- agency: notFoundTransaction
+                Agency <-- server: 404, Transaction does not exist
+            else Found transaction
+                transaction -> invoice: findInvoieById(invoiceId)
+                activate invoice
+                alt Not found invoice
+                transaction <-- invoice: notFoundInvoice
+                agency <-- transaction: notFoundInvoice
+                server <-- agency: notFoundInvoice
+                Agency <-- server: 404, Invoice does not exist
+                else Found invoice
+                transaction <-- invoice: foundInvoice
+                deactivate invoice
+                agency <-- transaction: foundInvoice
+                deactivate transaction
+                server <-- agency: foundInvoice
+                deactivate agency
+                Agency <-- server: 200, foundInvoice
+                deactivate server
+                end
+            end
+        end
+    end
+end
+
+@enduml

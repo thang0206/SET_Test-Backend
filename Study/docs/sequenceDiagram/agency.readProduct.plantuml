@@ -1,0 +1,39 @@
+@startuml read agency owner product
+
+actor Agency
+control server
+database agency
+database product
+
+opt Read agency product
+    Agency -> server: Get /products/:id, token
+    activate server
+    server -> server: verifyToken
+    alt Invalid token
+        Agency <-- server: 401, Invalid token
+    else Valid token
+        server -> server: isAgency
+        alt Is not agency
+            Agency <-- server: Is not agency
+        else Is agency
+            server -> agency: findAgency
+            activate agency
+            agency -> product: findProductById(id)
+            activate product
+            alt Not found product
+                agency <-- product: notFoundProduct
+                server <-- agency: notFoundProduct
+                Agency <-- server: 404, Product does not exist
+            else Found product
+                agency <-- product: foundProduct
+                deactivate product
+                server <-- agency: foundProduct
+                deactivate agency
+                Agency <-- server: 200, foundProduct
+                deactivate server
+            end
+        end
+    end
+end
+
+@enduml
