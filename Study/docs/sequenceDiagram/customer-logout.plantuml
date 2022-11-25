@@ -1,6 +1,6 @@
 @startuml logout
     actor Customer
-    participant Client
+    control Client
 
     Customer -> Client: Log out
     Client -->> Client: delete token in local

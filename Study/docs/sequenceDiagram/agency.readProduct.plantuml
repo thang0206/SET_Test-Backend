@@ -9,27 +9,27 @@ opt Read agency product
     Agency -> server: Get /products/:id, token
     activate server
     server -> server: verifyToken
-    alt Invalid token
-        Agency <-- server: 401, Invalid token
-    else Valid token
+    alt <font color=Red> Invalid token
+        Agency <-- server: 401
+    else <font color=Green> Valid token
         server -> server: isAgency
-        alt Is not agency
+        alt <font color=Red> Is not agency
             Agency <-- server: Is not agency
-        else Is agency
-            server -> agency: findAgency
+        else <font color=Green> Is agency
+            server -> agency: find Agency
             activate agency
-            agency -> product: findProductById(id)
+            agency -> product: find Product
             activate product
-            alt Not found product
-                agency <-- product: notFoundProduct
-                server <-- agency: notFoundProduct
-                Agency <-- server: 404, Product does not exist
-            else Found product
-                agency <-- product: foundProduct
+            alt <font color=Red> Not found product
+                agency <-- product: Product not exist
+                server <-- agency: Product not exist
+                Agency <-- server: 404
+            else <font color=Green> Found product
+                agency <-- product: Product exist
                 deactivate product
-                server <-- agency: foundProduct
+                server <-- agency: Product exist
                 deactivate agency
-                Agency <-- server: 200, foundProduct
+                Agency <-- server: 200
                 deactivate server
             end
         end

@@ -1,10 +1,10 @@
 @startuml customer
     actor Customer
-    participant Server
+    control Server
     database customer
 
     opt customer login
-        Customer -> Server: POST /login
+        Customer -> Server: POST /login, {email, password}
         activate Server
         Server -> customer: Find Customer(email, password)
         activate customer
@@ -17,8 +17,8 @@
             Server <-- customer: Can not found customer
             Customer <-- Server: 404
 
-        else <font color=Green> success 
-            Server <- customer: Success 
+        else <font color=Green> Found Customer
+            Server -> customer: Login Customer
             alt <font color=Red> error
                 Server <-- customer: Server error
                 Customer <-- Server: 500

@@ -1,6 +1,6 @@
 @startuml register
     actor Customer
-    participant Server
+    control Server
     database customer
 
     opt customer register
@@ -17,8 +17,8 @@
             Server <-- customer: Register again
             Customer <-- Server: 409
 
-        else <font color=Green> success 
-            Server <- customer: Success 
+        else <font color=Green> Customer not exsited 
+            Server -> customer: Create Customer(email, password) 
             alt <font color=Red> error
                 Server <-- customer: Server error
                 Customer <-- Server: 500
@@ -26,7 +26,7 @@
             else <font color=Green> success
                 Server <-- customer: Success
                 deactivate customer
-                Customer <-- Server: 200, Save token to local
+                Customer <-- Server: 200
                 deactivate Server
             end
         end 
