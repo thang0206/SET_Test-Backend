@@ -34,14 +34,14 @@ export class Product extends Entity {
   })
   updateAt?: string;
 
-  @belongsTo(() => Billing)
-  billingId: string;
-
   @belongsTo(() => User)
   userId: string;
 
   @belongsTo(() => Cart)
   cartId: string;
+
+  @belongsTo(() => Billing)
+  billingId: string;
   // Define well-known properties here
 
   // Indexer property to allow additional data
