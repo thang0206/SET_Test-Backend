@@ -61,7 +61,7 @@ entity Billing {
 }
 
 enum Role {
-    User
+    Customer
     Admin
     Agency
 }
