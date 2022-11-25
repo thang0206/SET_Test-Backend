@@ -1,6 +1,7 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Billing} from './billing.model';
 import {User} from './user.model';
+import {Cart} from './cart.model';
 
 @model({settings: {strict: false}})
 export class Product extends Entity {
@@ -38,6 +39,9 @@ export class Product extends Entity {
 
   @belongsTo(() => User)
   userId: string;
+
+  @belongsTo(() => Cart)
+  cartId: string;
   // Define well-known properties here
 
   // Indexer property to allow additional data
