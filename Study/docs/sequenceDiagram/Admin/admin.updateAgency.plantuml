@@ -12,14 +12,12 @@
                 server -> server : check admin
             alt <font color=Red> Is not admin
                 Admin <-- server : 403 Forbidden
-            else <font color=Green> Create agency
-                server -> agency : create agency
+            else <font color=Green> Success
+                server -> agency : update agency
                 alt <font color=Red> Error
                     Admin <-- server : 500 Internal Server Error
-                else <font color=Red> Have already agency
-                    Admin <-- server : 409 Conflict
                 else <font color=Green> Success
-                    server <-- agency : Created agency
+                    server <-- agency : Updated agency
                     Admin <-- server : 200 OK
                 end
             end
