@@ -1,0 +1,28 @@
+@startuml udapte Agency
+    actor Admin
+    control server
+    database agency
+
+    opt "Update Agency"
+        Admin -> server : PATCH /agencies/createAgency
+        server --> server : validate token
+        alt <font color=Red> Invalid token
+            Admin <-- server : 401 Unauthorized
+        else <font color=Green> Check admin
+                server -> server : check admin
+            alt <font color=Red> Is not admin
+                Admin <-- server : 403 Forbidden
+            else <font color=Green> Create agency
+                server -> agency : create agency
+                alt <font color=Red> Error
+                    Admin <-- server : 500 Internal Server Error
+                else <font color=Red> Have already agency
+                    Admin <-- server : 409 Conflict
+                else <font color=Green> Success
+                    server <-- agency : Created agency
+                    Admin <-- server : 200 OK
+                end
+            end
+        end
+    end
+@enduml

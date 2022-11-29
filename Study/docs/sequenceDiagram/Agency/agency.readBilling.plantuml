@@ -1,0 +1,51 @@
+@startuml read agency owner billing
+
+actor Agency
+control server
+database agency
+database transaction
+database billing
+
+opt Read agency transaction
+    Agency -> server: Get /transactions/:transactionId/billings/:billingId, token
+    activate server
+    server -> server: verifyToken
+    alt <font color=Red> Invalid token
+        Agency <-- server: 401
+    else <font color=Green> Valid token
+        server -> server: isAgency
+        alt <font color=Red> Is not agency
+            Agency <-- server: Is not agency
+        else <font color=Green> Is agency
+            server -> agency: find Agency
+            activate agency
+            agency -> transaction: find Transaction
+            activate transaction
+            alt <font color=Red> Not found transaction
+                agency <-- transaction: transaction not exist
+                server <-- agency: transaction not exist
+                Agency <-- server: 404
+            else <font color=Green> Found transaction
+                transaction -> billing: find Billing
+                activate billing
+                alt <font color=Red> Not found billing
+                transaction <-- billing: billing not exist
+                agency <-- transaction: billing not exist
+                server <-- agency: billing not exist
+                Agency <-- server: 404
+                else <font color=Green> Found billing
+                transaction <-- billing: found billing
+                deactivate billing
+                agency <-- transaction: found billing
+                deactivate transaction
+                server <-- agency: found billing
+                deactivate agency
+                Agency <-- server: 200
+                deactivate server
+                end
+            end
+        end
+    end
+end
+
+@enduml

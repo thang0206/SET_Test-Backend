@@ -1,66 +1,52 @@
-const neededContainer = 10;
-const listOption = [
-  {
-    name: "Container renter A",
-    container: 5,
-    totalCost: 5,
-  },
-  {
-    name: "Container renter B",
-    container: 2,
-    totalCost: 10,
-  },
-  {
-    name: "Container renter C",
-    container: 2,
-    totalCost: 3,
-  },
-];
+const { case1, case2, case3 } = require("./testCase");
 
-function getSumOfContainerAndTotalPrice(subAggregate, listOption) {
-  let container = 0,
-    totalPrice = 0;
-  const field = {
-    sumOfContainer: container,
-    sumOfTotalPrice: totalPrice,
-  };
-
-  for (let key in subAggregate) {
-    if (subAggregate[key] == 1) {
-      field.sumOfContainer += listOption[key].container;
-      field.sumOfTotalPrice += listOption[key].totalCost;
-    }
-  }
-  return field;
+// console.log("case1", case1);
+function sortListOption(listOption) {
+  listOption.sort((current, next) => {
+    return (
+      current.totalCost / current.container - next.totalCost / next.container
+    );
+  });
 }
 
-function solve(neededContainer, list) {
-  const subAggregate = list.map(() => 0);
-  let length = subAggregate.length;
-  let i;
-  let minPrice = Infinity;
-  do {
-    i = length - 1;
-    const field = getSumOfContainerAndTotalPrice(subAggregate, list);
-    if (
-      field.sumOfContainer === neededContainer &&
-      field.sumOfTotalPrice < minPrice
-    ) {
-      minPrice = field.sumOfTotalPrice;
+function solveProblem(neededContainer, listOption) {
+  const result = [];
+  sortListOption(listOption);
+  // console.log(listOption);
+  for (let i = 0; i < listOption.length; i++) {
+    const option = listOption[i];
+    const costPerOne = option.totalCost / option.container;
+    if (option.container >= neededContainer) {
+      option.container = neededContainer;
+      option.totalCost = costPerOne * option.container;
+      result.push({
+        ...option,
+      });
+      return result;
     }
-    while (i >= 0 && subAggregate[i] == 1) {
-      subAggregate[i] = 0;
-      i--;
-    }
-    if (i >= 0) {
-      subAggregate[i] = 1;
-    }
-  } while (i >= 0);
-  if (minPrice === Infinity) {
-    console.log("No enough");
-  } else {
-    console.log("total cost is " + minPrice);
+    result.push({
+      ...option,
+    });
+    neededContainer -= listOption[i].container;
   }
+  return result;
 }
 
-solve(neededContainer, listOption);
+function logOutPut(result, neededContainer) {
+  let totalCost = 0;
+  let totalContainer = 0;
+  result.forEach((element) => {
+    console.log(
+      `[Contract with] ${element.name} ${element.container} container, price: ${element.totalCost}`
+    );
+    totalCost += element.totalCost;
+    totalContainer += element.container;
+  });
+  if (totalContainer < neededContainer) {
+    console.log("No enough container");
+  }
+  console.log(`[Summary] total cost ${totalCost}`);
+}
+
+const result = solveProblem(case2.neededContainer, case2.listOption);
+logOutPut(result, case2.neededContainer);

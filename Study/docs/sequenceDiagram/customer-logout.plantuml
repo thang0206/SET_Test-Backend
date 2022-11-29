@@ -1,8 +1,0 @@
-@startuml logout
-    actor Customer
-    control Client
-
-    Customer -> Client: Log out
-    Client -->> Client: delete token in local
-    Customer <-- Client: Log out successfully
-@enduml
