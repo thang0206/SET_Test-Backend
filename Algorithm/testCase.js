@@ -23,7 +23,7 @@ const case2 = {
   listOption: [
     {
       name: "Container renter A",
-      container: 9,
+      container: 5,
       totalCost: 5,
     },
     {
@@ -33,7 +33,7 @@ const case2 = {
     },
     {
       name: "Container renter C",
-      container: 4,
+      container: 2,
       totalCost: 3,
     },
   ],

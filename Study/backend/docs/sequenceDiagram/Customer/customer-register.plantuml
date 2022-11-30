@@ -1,0 +1,35 @@
+@startuml register
+    actor Customer
+    control Server
+    database customer
+
+    opt customer register
+        Customer -> Server: POST /register
+        activate Server
+        Server -> customer: Find Customer(email, password)
+        activate customer
+
+        alt <font color=Red> error
+            Server <-- customer: Server error 
+            Customer <-- Server: 500
+
+        else <font color=Red> Customer exsited
+            Server <-- customer: Register again
+            Customer <-- Server: 409
+
+        else <font color=Green> Customer not exsited 
+            Server -> customer: Create Customer(email, password) 
+            alt <font color=Red> error
+                Server <-- customer: Server error
+                Customer <-- Server: 500
+
+            else <font color=Green> success
+                Server <-- customer: Success
+                deactivate customer
+                Customer <-- Server: 200
+                deactivate Server
+            end
+        end 
+    end
+
+@enduml

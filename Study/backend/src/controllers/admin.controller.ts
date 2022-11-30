@@ -33,10 +33,13 @@ export class AdminController {
   constructor(
     @repository(AdminRepository)
     public adminRepository : AdminRepository,
+
     @repository(AgencyRepository)
     public agencyRepository : AgencyRepository,
+
     @repository(UserRepository)
     public UserRepository : UserRepository,
+    
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
   ) {}
@@ -58,6 +61,8 @@ export class AdminController {
     return savedAdmin;
   }
 
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
   @post('/admins/createAgency', {
     responses: {
       '200': {
@@ -68,8 +73,6 @@ export class AdminController {
       }
     }
   })
-  @authenticate('jwt')
-  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
   async createAgency(@requestBody() agencyData: Agency) {
     await validateCredentialsAgency(_.pick(agencyData, ['email', 'password']), this.agencyRepository);
     agencyData.password = await this.hasher.hashPassword(agencyData.password)

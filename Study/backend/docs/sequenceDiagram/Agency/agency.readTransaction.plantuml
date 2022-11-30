@@ -1,0 +1,39 @@
+@startuml read agency owner transaction
+
+actor Agency
+control server
+database agency
+database transaction
+
+opt Read agency transaction
+    Agency -> server: Get /transactions/:id, token
+    activate server
+    server -> server: verifyToken
+    alt <font color=Red> Invalid token
+        Agency <-- server: 401
+    else <font color=Green> Valid token
+        server -> server: isAgency
+        alt <font color=Red> Is not agency
+            Agency <-- server: Is not agency
+        else <font color=Green> Is agency
+            server -> agency: find agency
+            activate agency
+            agency -> transaction: find transaction
+            activate transaction
+            alt <font color=Red> Not found transaction
+                agency <-- transaction: transaction not exist
+                server <-- agency: transaction not exist
+                Agency <-- server: 404
+            else <font color=Green> Found transaction
+                agency <-- transaction: found transaction
+                deactivate transaction
+                server <-- agency: found transaction
+                deactivate agency
+                Agency <-- server: 200
+                deactivate server
+            end
+        end
+    end
+end
+
+@enduml
