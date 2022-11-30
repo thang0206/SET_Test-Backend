@@ -1,7 +1,6 @@
 import {HttpErrors} from '@loopback/rest';
 import * as isEmail from 'isemail';
-import {Credentials} from '../repositories/index';
-import {UserRepository} from '../repositories/user.repository';
+import {Credentials, UserRepository, AgencyRepository} from '../repositories/index';
 export async function validateCredentials(credentials: Credentials, userRepository: UserRepository) {
   if (!isEmail.validate(credentials.email)) {
     throw new HttpErrors.UnprocessableEntity('invalid Email');
@@ -24,7 +23,7 @@ export async function validateCredentials(credentials: Credentials, userReposito
     throw new HttpErrors.UnprocessableEntity('this email already exists');
   }
 }
-/*
+
 export async function validateCredentialsAgency(credentials: Credentials, agencyRepository: AgencyRepository) {
   if (!isEmail.validate(credentials.email)) {
     throw new HttpErrors.UnprocessableEntity('invalid Email');
@@ -44,4 +43,4 @@ export async function validateCredentialsAgency(credentials: Credentials, agency
     throw new HttpErrors.UnprocessableEntity("passwordd length should be greater than 8")
   }
 }
-*/
+

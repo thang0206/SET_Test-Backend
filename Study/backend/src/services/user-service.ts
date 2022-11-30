@@ -37,7 +37,7 @@ export class MyCustomerService implements UserService<User, Credentials>{
       [securityId]: user.id!.toString(),
       id: user.id,
       email: user.email,
-      roles: user.role,
+      roles: user.roles,
     };
     // throw new Error('Method not implemented.');
   }

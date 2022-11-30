@@ -43,7 +43,7 @@ export class CustomerController {
   })
   async signup(@requestBody() customerData: User) {
     await validateCredentials(_.pick(customerData, ['email', 'password']), this.customerRepository);
-    customerData.role = "customer"
+    customerData.roles = ["customer"]
     customerData.password = await this.hasher.hashPassword(customerData.password)
     const savedCustomer = await this.customerRepository.create(customerData);
     savedCustomer.password = "******"
@@ -74,9 +74,7 @@ export class CustomerController {
   ): Promise<{token: string}> {
     // make sure customer exist,password should be valid
     const customer = await this.customerService.verifyCredentials(credentials);
-    // console.log(customer);
     const customerProfile = await this.customerService.convertToUserProfile(customer);
-    // console.log(customerProfile);
 
     const token = await this.jwtService.generateToken(customerProfile);
     return Promise.resolve({token: token})

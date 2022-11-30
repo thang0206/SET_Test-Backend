@@ -19,6 +19,18 @@ export class User extends Entity {
     type: 'string',
     required: true,
   })
+  address: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  phoneNumber: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
   email: string;
 
   @property({
@@ -26,12 +38,26 @@ export class User extends Entity {
     required: true,
   })
   password: string;
+
   @property({
-    type: 'string',
+    type: Array,
+    itemType: 'string',
     required: false,
-    default: 'customer',
+    default: ['customer'],
   })
-  role: string;
+  roles?: string[];
+
+  @property({
+    type: 'Date',
+    default: new Date()
+  })
+  createdAt?: Date
+
+  @property({
+    type: 'Date',
+    default: new Date()
+  })
+  updatedAt?: Date
 
 
   constructor(data?: Partial<User>) {
