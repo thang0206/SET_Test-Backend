@@ -18,14 +18,14 @@ import {validateCredentials} from '../services/validator-service';
 export class AuthController {
   constructor(
     @repository(UserRepository)
-    public customerRepository: UserRepository,
+    public userRepository: UserRepository,
     
 
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
 
     @inject(UserServiceBindings.USER_SERVICE)
-    public customerService: MyUserService,
+    public userService: MyUserService,
 
     @inject(TokenServiceBindings.TOKEN_SERVICE)
     public jwtService: JWTService,
@@ -43,10 +43,10 @@ export class AuthController {
     }
   })
   async signup(@requestBody() userData: User) {
-    await validateCredentials(_.pick(userData, ['email', 'password']), this.customerRepository);
+    await validateCredentials(_.pick(userData, ['email', 'password']), this.userRepository);
     userData.roles = ["customer"];
     userData.password = await this.hasher.hashPassword(userData.password);
-    const savedUser = await this.customerRepository.create(userData);
+    const savedUser = await this.userRepository.create(userData);
     savedUser.password = "******";
     return savedUser;
   }
@@ -73,9 +73,9 @@ export class AuthController {
   async login(
     @requestBody() credentials: Credentials,
   ): Promise<{token: string}> {
-    // make sure customer exist,password should be valid
-    const user = await this.customerService.verifyCredentials(credentials);
-    const userProfile = await this.customerService.convertToUserProfile(user);
+    // make sure user exist,password should be valid
+    const user = await this.userService.verifyCredentials(credentials);
+    const userProfile = await this.userService.convertToUserProfile(user);
 
     const token = await this.jwtService.generateToken(userProfile);
     return Promise.resolve({token: token});

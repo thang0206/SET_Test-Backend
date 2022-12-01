@@ -1,6 +1,5 @@
 const { case1, case2, case3 } = require("./testCase");
 
-// console.log("case1", case1);
 function sortListOption(listOption) {
   listOption.sort((current, next) => {
     return (
@@ -12,7 +11,6 @@ function sortListOption(listOption) {
 function solveProblem(neededContainer, listOption) {
   const result = [];
   sortListOption(listOption);
-  // console.log(listOption);
   for (let i = 0; i < listOption.length; i++) {
     const option = listOption[i];
     const costPerOne = option.totalCost / option.container;
