@@ -12,7 +12,7 @@ entity User {
     *phoneNumber: String
     gender: Gender <<enum>>
     role: Role <<enum>>
-    createAt: Date
+    createdAt: Date
     updatedAt: Date
 }
 
@@ -21,8 +21,7 @@ entity Cart {
     --
     user_ID: String <<FK>>
     --
-    totalProduct: Number
-    createAt: Date
+    createdAt: Date
     updatedAt: Date
 }
 
@@ -35,7 +34,7 @@ entity Product {
     --
     *name: String
     *price: Number
-    createAt: Date
+    createdAt: Date
     updatedAt: Date
 }
 
@@ -45,7 +44,7 @@ entity Transaction {
     user_ID: String <<FK>>
     --
     *status: DeliveryStatus <<enum>>
-    createAt: Date
+    createdAt: Date
     updatedAt: Date
 }
 
@@ -56,7 +55,7 @@ entity Billing {
     --
     *totalPrice: Number <<FK>>
     *payment: Payment <<enum>>
-    createAt: Date
+    createdAt: Date
     updatedAt: Date
 }
 
@@ -86,7 +85,7 @@ enum DeliveryStatus {
 
 
 User ||--|| Cart
-User ||--|| Transaction
+User ||--|{ Transaction
 User ||--|{ Product
 Cart ||--|{ Product
 Billing ||--|{ Product

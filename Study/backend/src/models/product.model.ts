@@ -36,6 +36,11 @@ export class Product extends Entity {
   })
   agencyId?: string;
 
+  @property({
+    type: 'string',
+  })
+  billingId?: string;
+
   constructor(data?: Partial<Product>) {
     super(data);
   }

@@ -17,19 +17,19 @@ export async function basicAuthorization(
   authorizationCtx: AuthorizationContext,
   metadata: AuthorizationMetadata,
 ): Promise<AuthorizationDecision> {
-  let currentCustomer: UserProfile;
+  let currentUser: UserProfile;
   if (authorizationCtx.principals.length > 0) {
-    const customer = _.pick(authorizationCtx.principals[0], [
+    const user = _.pick(authorizationCtx.principals[0], [
       'id',
       'name',
       'roles',
     ]);
-    currentCustomer = {[securityId]: customer.id, name: customer.name, roles: customer.roles};
+    currentUser = {[securityId]: user.id, name: user.name, roles: user.roles};
   } else {
     return AuthorizationDecision.DENY;
   }
 
-  if (!currentCustomer.roles) {
+  if (!currentUser.roles) {
     return AuthorizationDecision.DENY;
   }
 
@@ -38,7 +38,7 @@ export async function basicAuthorization(
   }
 
   let roleIsAllowed = false;
-  for (const role of currentCustomer.roles) {
+  for (const role of currentUser.roles) {
     if (metadata.allowedRoles!.includes(role)) {
       roleIsAllowed = true;
       break;
@@ -50,13 +50,13 @@ export async function basicAuthorization(
   }
 
   if (
-    currentCustomer.roles.includes('admin') ||
-    currentCustomer.roles.includes('support')
+    currentUser.roles.includes('admin') ||
+    currentUser.roles.includes('support')
   ) {
     return AuthorizationDecision.ALLOW;
   }
 
-  if (currentCustomer[securityId] === authorizationCtx.invocationContext.args[0]) {
+  if (currentUser[securityId] === authorizationCtx.invocationContext.args[0]) {
     return AuthorizationDecision.ALLOW;
   }
 

@@ -34,7 +34,7 @@ export class UserController {
 
   ) {}
 
-  @post("/admins/createAdmin", {
+  @post('/admins/users/createAdmin', {
     responses: {
       '200': {
         description: 'create, authorize admin',
@@ -44,7 +44,7 @@ export class UserController {
   })
   async createAdmin(@requestBody() admin: User) {
     validateCredentials(_.pick(admin, ['email', 'password']), this.UserRepository);
-    admin.roles = ["admin"]
+    admin.roles = ['admin']
 
     admin.password = await this.hasher.hashPassword(admin.password);
     const savedAdmin = await this.UserRepository.create(admin);
@@ -53,7 +53,7 @@ export class UserController {
 
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
-  @post('/admins/createAgency', {
+  @post('/admins/users/createAgency', {
     responses: {
       '200': {
         description: 'Admin create Agency',

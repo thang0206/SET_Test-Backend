@@ -26,6 +26,7 @@ export class AgencyProductController {
     @repository(AgencyRepository) protected agencyRepository: AgencyRepository,
   ) { }
 
+  // agency read own product data
   @get('/agencies/{id}/products', {
     responses: {
       '200': {
