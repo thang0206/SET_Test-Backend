@@ -4,15 +4,14 @@ import {authorize} from '@loopback/authorization';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {get, getJsonSchemaRef, getModelSchemaRef, post, requestBody} from '@loopback/rest';
-import {UserProfile} from '@loopback/security';
-import * as _ from 'lodash';
-import {CustomerServiceBindings, PasswordHasherBindings, TokenServiceBindings} from '../keys';
+import _ from 'lodash';
+import {UserServiceBindings, PasswordHasherBindings, TokenServiceBindings} from '../keys';
 import {Agency, User} from '../models';
 import {Credentials, UserRepository, AgencyRepository} from '../repositories';
 import {basicAuthorization} from '../services/authorization';
 import {BcryptHasher} from '../services/hash.password';
 import {JWTService} from '../services/jwt-service';
-import {MyCustomerService} from '../services/user-service';
+import {MyUserService} from '../services/user-service';
 import {validateCredentials, validateCredentialsAgency} from '../services/validator-service';
 
 export class UserController {
@@ -26,8 +25,8 @@ export class UserController {
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
 
-    @inject(CustomerServiceBindings.CUSTOMER_SERVICE)
-    public customerService: MyCustomerService,
+    @inject(UserServiceBindings.USER_SERVICE)
+    public customerService: MyUserService,
 
     @inject(TokenServiceBindings.TOKEN_SERVICE)
     public jwtService: JWTService,

@@ -8,7 +8,7 @@ import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories/user.repository';
 import {BcryptHasher} from './hash.password';
 
-export class MyCustomerService implements UserService<User, Credentials>{
+export class MyUserService implements UserService<User, Credentials>{
   constructor(
     @repository(UserRepository)
     public UserRepository: UserRepository,

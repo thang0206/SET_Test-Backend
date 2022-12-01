@@ -8,11 +8,11 @@ import {RestExplorerBindings, RestExplorerComponent} from '@loopback/rest-explor
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {JWTStrategy} from './authentication/authentication';
-import {CustomerServiceBindings, PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants} from './keys';
+import {UserServiceBindings, PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants} from './keys';
 import {MySequence} from './sequence';
 import {BcryptHasher} from './services/hash.password';
 import {JWTService} from './services/jwt-service';
-import {MyCustomerService} from './services/user-service';
+import {MyUserService} from './services/user-service';
 export {ApplicationConfig};
 export class BackendApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -56,7 +56,7 @@ export class BackendApplication extends BootMixin(
   setupBinding(): void {
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
     this.bind(PasswordHasherBindings.ROUNDS).to(10)
-    this.bind(CustomerServiceBindings.CUSTOMER_SERVICE).toClass(MyCustomerService);
+    this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
     this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JWTService);
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(TokenServiceConstants.TOKEN_SECRET_VALUE)
     this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(TokenServiceConstants.TOKEN_EXPIRES_IN_VALUE);
