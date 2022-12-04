@@ -2,8 +2,8 @@ import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {OPERATION_SECURITY_SPEC} from '@loopback/authentication-jwt';
 import {authorize} from '@loopback/authorization';
 import {inject} from '@loopback/core';
-import {repository} from '@loopback/repository';
-import {get, getJsonSchemaRef, getModelSchemaRef, post, requestBody} from '@loopback/rest';
+import {FilterExcludingWhere, repository} from '@loopback/repository';
+import {del, get, getJsonSchemaRef, getModelSchemaRef, param, patch, post, requestBody, response} from '@loopback/rest';
 import _ from 'lodash';
 import {UserServiceBindings, PasswordHasherBindings, TokenServiceBindings} from '../keys';
 import {Agency, User} from '../models';
@@ -68,5 +68,54 @@ export class UserController {
     const savedAgency = await this.agencyRepository.create(agencyData);
     savedAgency.password = "******"
     return savedAgency;
+  }
+
+  
+  @get("admins/users/readAgency")
+  @response(200, {
+    description: 'Admin read data of agency',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(User, {includeRelations: true}),
+      },
+    },
+  })
+  async findById(
+    @param.path.string('id') id: string,
+    @param.filter(Agency, {exclude: 'where'}) filter?: FilterExcludingWhere<Agency>
+  ): Promise<Agency> {
+    return this.agencyRepository.findById(id, filter);
+  }
+
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
+  @patch("admins/users/updateAgency")
+  @response(204, {
+    description: 'Agency PATCH success',
+  })
+  async updateById(
+    @param.path.string('id') id: string,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(User, {partial: true}),
+        },
+      },
+    })
+    agency: User,
+  ): Promise<void> {
+    agency.updatedAt = new Date()
+    await this.agencyRepository.updateById(id, agency);
+  }
+
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
+  @del("admins/users/deleteAgency")
+  @response(204, {
+    description: 'Agency DELETE success',
+  })
+  
+  async deleteById(@param.path.string('id') id: string): Promise<void> {
+    await this.agencyRepository.deleteById(id);
   }
 }

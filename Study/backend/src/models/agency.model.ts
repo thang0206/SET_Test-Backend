@@ -41,14 +41,16 @@ export class Agency extends Entity {
   password: string;
 
   @property({
-    type: 'date',
+    type: 'Date',
+    default: new Date()
   })
-  createdAt?: string;
+  createdAt?: Date
 
   @property({
-    type: 'date',
+    type: 'Date',
+    default: new Date()
   })
-  updatedAt?: string;
+  updatedAt?: Date
 
   @hasMany(() => Product)
   products: Product[];
