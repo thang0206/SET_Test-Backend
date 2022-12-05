@@ -71,7 +71,7 @@ export class UserController {
   }
 
   
-  @get("admins/users/readAgency")
+  @get("admins/users/readAgency/{id}")
   @response(200, {
     description: 'Admin read data of agency',
     content: {
@@ -89,7 +89,7 @@ export class UserController {
 
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
-  @patch("admins/users/updateAgency")
+  @patch("admins/users/updateAgency/{id}")
   @response(204, {
     description: 'Agency PATCH success',
   })
@@ -110,7 +110,7 @@ export class UserController {
 
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
-  @del("admins/users/deleteAgency")
+  @del("admins/users/deleteAgency/{id}")
   @response(204, {
     description: 'Agency DELETE success',
   })

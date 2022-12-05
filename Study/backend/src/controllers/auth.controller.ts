@@ -1,5 +1,5 @@
 import {authenticate, AuthenticationBindings} from '@loopback/authentication';
-import {OPERATION_SECURITY_SPEC} from '@loopback/authentication-jwt';
+import {OPERATION_SECURITY_SPEC} from '../utils/security-spec';
 import {authorize} from '@loopback/authorization';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
