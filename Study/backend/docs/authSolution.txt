@@ -1,0 +1,12 @@
+1. My solution: Make use of loopback Authentication Component, loopback JWT extension, and loopack Authorization component
+
+2. Strong point:
+  + A lot of documents in loopback page
+  + Good with an Enterprise application where you need to work on some complex data models
+  + Adapt a lot of core features
+
+3. Weak points:
+  + Might be hard to adjust as the company, customer want
+  + Harder in coding compared with other ways
+
+4. To improve my solution, I think nothing better than taking it seriously, spending time going over docs and trying to set up a complete loopback backend.

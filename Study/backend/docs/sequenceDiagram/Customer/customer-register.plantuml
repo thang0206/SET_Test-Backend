@@ -1,35 +1,35 @@
-@startuml register
-    actor Customer
-    control Server
-    database customer
+@startuml signup customer sequence
 
-    opt customer register
-        Customer -> Server: POST /register
-        activate Server
-        Server -> customer: Find Customer(email, password)
-        activate customer
+header SIGN UP CUSTOMER SEQUENCE
+actor Customer 
+control server
+database customer
 
-        alt <font color=Red> error
-            Server <-- customer: Server error 
-            Customer <-- Server: 500
-
-        else <font color=Red> Customer exsited
-            Server <-- customer: Register again
-            Customer <-- Server: 409
-
-        else <font color=Green> Customer not exsited 
-            Server -> customer: Create Customer(email, password) 
-            alt <font color=Red> error
-                Server <-- customer: Server error
-                Customer <-- Server: 500
-
-            else <font color=Green> success
-                Server <-- customer: Success
-                deactivate customer
-                Customer <-- Server: 200
-                deactivate Server
-            end
-        end 
+opt CREATE: Custommer sign up
+  Customer -> server: POST /signup with customer data
+  activate server
+      server -> customer: find customer with email
+      activate customer
+      alt <font color=red>have error</font>
+        customer --> server: error
+        server --> Customer: 500, internal error
+      else <font color=red>have customer data</font>
+        customer --> server: customer data
+        server --> Customer: 409, existed customer
+      else <font color=green>have no customer data</font>
+          server -> customer: create new customer
+          alt <font color=red>have error</font>
+            customer --> server: error
+            server --> Customer: 500, internal error
+          else <font color=green>success</font>
+            customer --> server: success
+            server --> Customer: 200, success
+          end
+      end
     end
+    deactivate customer
+    deactivate server
+
+
 
 @enduml

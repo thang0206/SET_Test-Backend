@@ -1,0 +1,39 @@
+@startuml read agency information customer sequence
+
+header READ AGENCY INFORMATION CUSTOMER SEQUENCE
+actor Customer 
+control server
+database agency
+database information
+
+opt READ: Custommer read agency information
+  Customer -> server: GET /customers/readAgency/{id}
+  activate server
+  server -> server: check token
+  alt <font color=red>token invalid</font>
+    server --> Customer: 401, unauthorized error
+  else <font color=green>token valid</font>
+    server -> server: check isCustomer
+    alt <font color=red>is not customer</font>
+      server --> Customer: 403, forbidden error
+    else <font color=green>is customer</font>
+      server -> agency: find agency
+      alt <font color=red>agency not found</font>
+        agency --> server: error
+        server --> Customer: 404, Not found
+      else <font color=green>found agency</font>
+        agency --> information: find information
+      else <font color=green>have agency linked with information data</font>
+          information --> agency: response information
+          agency --> server: response information
+      else <font color=green>success</font>
+          agency --> server: success
+          server --> Customer: 200, success, response data
+        end
+      end
+    end
+  end
+    deactivate server
+
+
+@enduml

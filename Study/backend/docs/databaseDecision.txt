@@ -1,0 +1,16 @@
+1.	With UML you have already designed on question 1, what database are you using to implement?
+-	With UML designed on question 1, I’m using NoSQL database and MongoDB as an open source NoSQL database management program.2.
+
+2.	Why are you using that? What is the strong and weak point of it?
+-	The reason for using this database is because:
++ I’m more used to using it.
++ I find NoSQL database more suitable with the UML designed on question 1.
+-	Strong points:
++ Performance: faster than SQL.
++ Scalability: Easy to scale out .
++ Flexibility: Flexible document Data model.
+
+-	Weak points:
++ NoSQL databases don’t have the reliability functions which Relational Databases have (basically don’t support ACID).
++ Is not compatible (at all) with SQL.
++ NoSQL are very new compared to Relational Databases.
